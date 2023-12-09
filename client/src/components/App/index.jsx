@@ -1,17 +1,20 @@
 import React from "react";
-import styles from './index.module.scss';
 import InputAdd from "../InputAdd";
+import ListTodos from "../ListTodos";
+import styles from './index.module.scss';
 
 const App = () => {
-  return (
-    <article className={styles.article}>
-         <h1 className={styles.articleTitle}>To Do App</h1>
-      <section className={styles.articleSection}>
-          <InputAdd/>
-      </section>
-      <section className={styles.articleSection}></section>
-    </article>
-  );
+    return (
+        <div className={styles.app}>
+            <h1 className={styles.appTitle}>To Do App</h1>
+            <div className={styles.appInput}>
+                <InputAdd/>
+            </div>
+            <div className={styles.appList}>
+                <ListTodos/>
+            </div>
+        </div>
+    );
 }
 
 export default App;

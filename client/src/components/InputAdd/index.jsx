@@ -3,9 +3,14 @@ import styles from "./index.module.scss";
 
 const InputAdd = () => {
     const [description, setDescription] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = async e => {
         e.preventDefault();
+        if (description.trim().length === 0) {
+            setError("Please enter valid task.");
+            return;
+        }
         try {
             const body = {description};
             const response = await fetch("http://localhost:5000/todos", {
@@ -24,11 +29,6 @@ const InputAdd = () => {
         setDescription(e.target.value);
     };
 
-    const handleClick = () => {
-
-    }
-
-
     return (
         <form
             onSubmit={handleSubmit}
@@ -38,12 +38,12 @@ const InputAdd = () => {
                 className={styles.formInput}
                 value={description}
                 onChange={handleChange}
-                placeholder="Create todo..."
+                placeholder="Create task..."
             />
             <button
                 className={styles.formButton}
-                // onClick={handleClick}
             >Add</button>
+            {error && <p className={styles.formText}>{error}</p>}
         </form>
     );
 };
