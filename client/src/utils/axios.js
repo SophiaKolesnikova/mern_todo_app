@@ -1,6 +1,6 @@
-import axios, { Canceler } from "axios";
+import axios from "axios";
 
-const API_BASE = "https://localhost:5000";
+const API_BASE = "http://localhost:5000";
 
 
 const get = (path, params) => {

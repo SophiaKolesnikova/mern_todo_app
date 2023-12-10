@@ -1,41 +1,48 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import styles from './index.module.scss';
 
-const ListTodos = () => {
-    const [todos, setTodos] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [cheked, setChecked] = useState(false);
 
-    useEffect(() => {
-        setLoading(true);
-        const fetchTodos = async () => {
-            const response = await fetch("http://localhost:5000/todos");
-            const todosArray = await response.json();
-            setTodos(todosArray);
-            setLoading(false);
-        };
-        fetchTodos();
-    }, []);
+const ListTodos = ({todo}) => {
+    const [checked, setChecked] = useState(false);
+    const [edit, setEdit] = useState(false);
+    const [value, setValue] = useState(todo.description);
 
-    console.log(todos)
+
+    const handleChecked = (e) => {
+        setChecked(e.target.checked);
+    };
+
+    const handleChange = (e) => {
+        setValue(e.target.value);
+    };
+
+
     return (
         <div className={styles.listTodos}>
-            {loading && <p>Loading...</p>}
-            {/*{todos?.map(todo) => (*/}
-
-            {/*    )}*/}
-            <label>
+            <label className={styles.listTodosLabel}>
                 <input
                     type="checkbox"
+                    disabled={edit}
                     className={styles.listTodosCheckbox}
-                    checked={cheked}
-                    onChange={(e) => setChecked(e.target.checked)}
+                    checked={checked}
+                    onChange={handleChecked}
                 />
-                <h3 className={styles.listTodosText}>{description}</h3>
+                {edit ? (
+                    <input
+                        className={styles.listTodosDescription}
+                        value={value}
+                        onChange={handleChange}
+                    />
+                ) : (
+                    <h3 className={styles.listTodosText}>{todo.description}</h3>
+                )}
             </label>
-            <button className={styles.listTodosEdit}>Edit</button>
+            {edit ? (
+                <button className={styles.listTodosEdit}>Save</button>
+            ) : (
+                <button className={styles.listTodosEdit}>Edit</button>
+            )}
             <button className={styles.listTodosDelete}>Delete</button>
-
         </div>
     );
 };
