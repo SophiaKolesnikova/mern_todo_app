@@ -1,10 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
-import styles from './index.module.scss';
-import {useMutation, useQueryClient} from "react-query";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useMutation, useQueryClient } from "react-query";
 import * as TodoAPI from "../../api/todos.api";
+import { debounce } from 'lodash';
 
+import styles from './index.module.scss';
 
-const ListTodos = ({todo}) => {
+const ListTodos = ({ todo }) => {
+    const [description, setDescription] = useState(todo.description);
     const [edit, setEdit] = useState(false);
     const [checked, setChecked] = useState(false);
     const editInputRef = useRef(null);
@@ -16,8 +18,7 @@ const ListTodos = ({todo}) => {
         }
     }, [edit]);
 
-
-    const {mutate: updatedTodo} = useMutation(
+    const {mutate: updateTodo} = useMutation(
         (updatedTodo) => TodoAPI.updateTodo(updatedTodo),
         {
             onSettled: () => {
@@ -26,16 +27,28 @@ const ListTodos = ({todo}) => {
         }
     );
 
+    const debouncedUpdateTodo = useCallback(
+        debounce(updateTodo, 700),
+        [updateTodo]
+    );
+
+    useEffect(() => {
+        if (description !== todo.description) {
+            debouncedUpdateTodo({
+                ...todo,
+                description,
+            });
+        }
+    }, [description]);
 
     const {mutate: deleteTodo} = useMutation(
-        (deleteTodo) => TodoAPI.removeTodo(deleteTodo),
+        (deletedTodo) => TodoAPI.removeTodo(deletedTodo),
         {
             onSettled: () => {
                 queryClient.invalidateQueries('todos');
             },
         }
     );
-
 
     const handleCheckbox = (e) => {
         setChecked(e.target.checked);
@@ -44,14 +57,15 @@ const ListTodos = ({todo}) => {
         }, 300);
     };
 
-
-    const handleChange = (e) => {
-        updatedTodo({
-            ...todo,
-            description: e.target.value
-        })
+    const handleOnKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            setEdit(false);
+        }
     };
 
+    const handleChange = (e) => {
+        setDescription(e.target.value);
+    };
 
     return (
         <div className={styles.listTodos}>
@@ -62,15 +76,15 @@ const ListTodos = ({todo}) => {
                     checked={checked}
                     disabled={edit}
                     onChange={handleCheckbox}
-
                 />
                 {edit ? (
                     <input
                         className={styles.listTodosDescription}
                         type="text"
-                        value={todo.description}
+                        value={description}
                         onChange={handleChange}
                         ref={editInputRef}
+                        onKeyDown={handleOnKeyDown}
                     />
                 ) : (
                     <h3

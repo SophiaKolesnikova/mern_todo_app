@@ -1,16 +1,16 @@
-import React, {useEffect, useRef} from 'react';
-import {useAddTodo} from "../../hooks/useAddTodo";
-import styles from "./index.module.scss";
-import {useMutation, useQueryClient} from "react-query";
+import React, { useEffect, useRef, useState } from 'react';
+import { useMutation, useQueryClient } from "react-query";
 import * as TodoAPI from "../../api/todos.api";
 
+import styles from "./index.module.scss";
+
 const InputAdd = () => {
-    const {description, error, addNewTodo, setDescription, loading} = useAddTodo();
+    const [description, setDescription] = useState('');
     const addInputRef = useRef(null);
     const queryClient = useQueryClient();
 
-    const {mutate: newTodo} = useMutation(
-        (newTodo) => TodoAPI.addTodo(newTodo),
+    const {mutate: createTodo} = useMutation(
+        (createTodo) => TodoAPI.addTodo(createTodo),
         {
             onSettled: () => {
                 queryClient.invalidateQueries('todos');
@@ -22,13 +22,22 @@ const InputAdd = () => {
         addInputRef?.current?.focus();
     }, [addInputRef]);
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!description) return;
+        createTodo({
+            description,
+        });
+        setDescription('');
+    };
+
     const handleChange = (e) => {
         setDescription(e.target.value);
     };
 
     return (
         <form
-            onSubmit={addNewTodo}
+            onSubmit={handleSubmit}
             className={styles.form}>
             <input
                 type="text"
@@ -43,8 +52,6 @@ const InputAdd = () => {
                 type='submit'
             >Add
             </button>
-            {error && <p className={styles.formText}>{error}</p>}
-            {loading && <p>Loading...</p>}
         </form>
     );
 };
