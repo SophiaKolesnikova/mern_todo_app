@@ -1,10 +1,22 @@
 import React, {useEffect, useRef} from 'react';
-import {useAddTodo} from "../../hooks/addTodo";
+import {useAddTodo} from "../../hooks/useAddTodo";
 import styles from "./index.module.scss";
+import {useMutation, useQueryClient} from "react-query";
+import * as TodoAPI from "../../api/todos.api";
 
 const InputAdd = () => {
     const {description, error, addNewTodo, setDescription, loading} = useAddTodo();
     const addInputRef = useRef(null);
+    const queryClient = useQueryClient();
+
+    const {mutate: newTodo} = useMutation(
+        (newTodo) => TodoAPI.addTodo(newTodo),
+        {
+            onSettled: () => {
+                queryClient.invalidateQueries('todos');
+            },
+        }
+    );
 
     useEffect(() => {
         addInputRef?.current?.focus();

@@ -25,7 +25,7 @@ export const useAddTodo = () => {
             setLoading(false);
             setError(error.message);
         }
-            window.location = "/";
+            // window.location = "/";
     };
   return {description, error, addNewTodo, setDescription, loading};
 };

@@ -1,16 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useRemoveTodo} from "../../hooks/removeTodo";
-import {useUpdateTodo} from "../../hooks/updateTodo";
 import styles from './index.module.scss';
+import {useMutation, useQueryClient} from "react-query";
+import * as TodoAPI from "../../api/todos.api";
 
 
 const ListTodos = ({todo}) => {
     const [edit, setEdit] = useState(false);
     const [checked, setChecked] = useState(false);
-    const [description, setDescription] = useState(todo.description);
     const editInputRef = useRef(null);
-    const {deleteTodo} = useRemoveTodo();
-    const {editTodo} = useUpdateTodo();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         if (edit) {
@@ -19,18 +17,41 @@ const ListTodos = ({todo}) => {
     }, [edit]);
 
 
+    const {mutate: updatedTodo} = useMutation(
+        (updatedTodo) => TodoAPI.updateTodo(updatedTodo),
+        {
+            onSettled: () => {
+                queryClient.invalidateQueries('todos');
+            },
+        }
+    );
+
+
+    const {mutate: deleteTodo} = useMutation(
+        (deleteTodo) => TodoAPI.removeTodo(deleteTodo),
+        {
+            onSettled: () => {
+                queryClient.invalidateQueries('todos');
+            },
+        }
+    );
+
+
     const handleCheckbox = (e) => {
         setChecked(e.target.checked);
         setTimeout(() => {
-            deleteTodo(todo.todo_id);
-        }, 300)
-
+            deleteTodo(todo);
+        }, 300);
     };
 
 
     const handleChange = (e) => {
-        setDescription(e.target.value);
+        updatedTodo({
+            ...todo,
+            description: e.target.value
+        })
     };
+
 
     return (
         <div className={styles.listTodos}>
@@ -46,24 +67,24 @@ const ListTodos = ({todo}) => {
                 {edit ? (
                     <input
                         className={styles.listTodosDescription}
-                        value={description}
-                        onChange={() => handleChange}
+                        type="text"
+                        value={todo.description}
+                        onChange={handleChange}
                         ref={editInputRef}
                     />
                 ) : (
                     <h3
                         className={styles.listTodosText}
                         style={checked ? {textDecoration: 'line-through'} : {textDecoration: 'none'}}
-                    >{todo.description}</h3>
+                    >
+                        {todo.description}
+                    </h3>
                 )}
             </label>
             {edit ? (
                 <button
                     className={styles.listTodosSave}
-                    onClick={() => {
-                        editTodo(todo.todo_id, todo.description);
-                        setEdit(false);
-                    }}
+                    onClick={() => setEdit(false)}
                 >Save</button>
             ) : (
                 <button
@@ -73,7 +94,7 @@ const ListTodos = ({todo}) => {
             )}
             <button
                 className={styles.listTodosDelete}
-                onClick={() => deleteTodo(todo.todo_id)}
+                onClick={() => deleteTodo(todo)}
             >Delete
             </button>
         </div>

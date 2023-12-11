@@ -1,11 +1,13 @@
 import * as TodoAPI from "../api/todos.api";
 import {useEffect, useState} from "react";
+import {useQuery} from "react-query";
 
 
 export const useFetchTodos = () => {
     const [todos, setTodos] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    // const {isLoading, data: todos} = useQuery('todos', TodoAPI.getTodos)
 
    const fetchTodos = async () => {
        try {
@@ -25,5 +27,5 @@ export const useFetchTodos = () => {
         fetchTodos();
     }, []);
 
-   return {todos, loading, error, setTodos};
+   return {todos, error, loading};
 };
