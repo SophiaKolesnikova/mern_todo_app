@@ -1,31 +1,14 @@
-import React, {useState} from 'react';
-import styles from "./index.module.scss";
+import React, {useEffect, useRef} from 'react';
 import {useAddTodo} from "../../hooks/addTodo";
+import styles from "./index.module.scss";
 
 const InputAdd = () => {
-    const {description,error, addNewTodo, setDescription, loading} = useAddTodo();
-    // const [description, setDescription] = useState('');
-    // const [error, setError] = useState('');
-    //
-    // const handleSubmit = async e => {
-    //     e.preventDefault();
-    //     if (description.trim().length === 0) {
-    //         setError("Please enter valid task.");
-    //         return;
-    //     }
-    //     try {
-    //         const body = {description};
-    //         const response = await fetch("http://localhost:5000/todos", {
-    //             method: "POST",
-    //             headers: {"Content-Type": "application/json"},
-    //             body: JSON.stringify(body)
-    //         });
-    //        console.log(response);
-    //         setDescription('');
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
+    const {description, error, addNewTodo, setDescription, loading} = useAddTodo();
+    const addInputRef = useRef(null);
+
+    useEffect(() => {
+        addInputRef?.current?.focus();
+    }, [addInputRef]);
 
     const handleChange = (e) => {
         setDescription(e.target.value);
@@ -40,11 +23,14 @@ const InputAdd = () => {
                 className={styles.formInput}
                 value={description}
                 onChange={handleChange}
+                ref={addInputRef}
                 placeholder="Create task..."
             />
             <button
                 className={styles.formButton}
-            >Add</button>
+                type='submit'
+            >Add
+            </button>
             {error && <p className={styles.formText}>{error}</p>}
             {loading && <p>Loading...</p>}
         </form>

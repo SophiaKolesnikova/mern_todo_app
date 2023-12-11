@@ -25,5 +25,5 @@ export const useFetchTodos = () => {
         fetchTodos();
     }, []);
 
-   return {todos, loading, error}
+   return {todos, loading, error, setTodos};
 };

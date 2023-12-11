@@ -20,7 +20,7 @@ const App = () => {
                 {loading && <p>Loading...</p>}
                 {error && <p>{error}</p>}
                 {todos?.map((todo) => (
-                    <ListTodos todo={todo} key={todo.description}/>
+                    <ListTodos todo={todo} key={todo.todo_id}/>
                 ))}
             </div>
         </div>

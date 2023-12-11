@@ -1,7 +1,6 @@
 import * as TodoAPI from "../api/todos.api";
 import {useState} from "react";
 
-
 export const useAddTodo = () => {
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
@@ -26,6 +25,7 @@ export const useAddTodo = () => {
             setLoading(false);
             setError(error.message);
         }
+            window.location = "/";
     };
   return {description, error, addNewTodo, setDescription, loading};
-}
+};
