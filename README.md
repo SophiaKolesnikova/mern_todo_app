@@ -50,5 +50,6 @@ ________________________________________________________________________________
 
 - Change to `/client` directory.
 - Install dependencies using `npm i`.
-- run `npm start`. Frontend will open at `http://localhost:3000`/.
+- Add prettier package on your IDE: `~\pern_todo_app\client\node_modules\prettier`
+- Run `npm start`. Frontend will open at `http://localhost:3000`/.
 ______________________________________________________________________________________________________
