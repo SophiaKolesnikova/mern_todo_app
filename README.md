@@ -42,7 +42,7 @@ ________________________________________________________________________________
 to hide credentials if commiting to Github.
 - Postgresql shell commands: `\l` list all databases. `\c` database1 connect to database1.
 `\dt` inspect tables. `\d+` inspect table & show relation information. `\q` to quit.
-- Run `nodemon start` for a dev server.
+- Run `npm start` for a dev server.
 - `http://localhost:5000/` can be accessed for CRUD operations such as
 POST, GET, PUT, DELETE etc. using Postman.
 ______________________________________________________________________________________________________
