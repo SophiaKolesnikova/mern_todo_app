@@ -1,28 +1,29 @@
 # PERN Full Stack Todo
 - PostgreSQL Express React Node (PERN) full-stack app, integrates React frontend with Node.js backend.
 ______________________________________________________________________________________________________
-
-
 ## Genereal info
-______________________________________________________________________________________________________
+
 ### Backend
+
 - PostgreSQL needs to be installed and running - I started it from my Windows 10 PostgreSQL 12 dropdown
 option 'SQL shell (psql)'.
 - Postman used to test the backend before frontend was available.
+______________________________________________________________________________________________________
 ### Frontend
+
 - React frontend includes a simple todo list with a user input field and a table of todos below.
 User can edit and delete todos.
-
-## Technologies - Backend
 ______________________________________________________________________________________________________
+## Technologies - Backend
+
 - PostgreSQL v16
 - Express.js
 - Node.js v16
 - Nodemon v3 npm module so backend server will automatically restart after code changes
 - Postman API to simulate a frontend
-
-## Technologies - Frontend
 ______________________________________________________________________________________________________
+## Technologies - Frontend
+
 - React.js v18
 - Axios 
 - Lodash
@@ -30,9 +31,9 @@ ________________________________________________________________________________
 - Eslint v8
 - Prettier v3
 - Sass
-
-## Set up - Backend
 ______________________________________________________________________________________________________
+## Set up - Backend
+
 - Change to `/server` directory.
 - Install dependencies using  `npm i`.
 - Install `nodemon` globally if you don't already have it.
@@ -44,9 +45,10 @@ to hide credentials if commiting to Github.
 - Run `nodemon start` for a dev server.
 - `http://localhost:5000/` can be accessed for CRUD operations such as
 POST, GET, PUT, DELETE etc. using Postman.
-
-## Set up - Frontend
 ______________________________________________________________________________________________________
+## Set up - Frontend
+
 - Change to `/client` directory.
 - Install dependencies using `npm i`.
 - run `npm start`. Frontend will open at `http://localhost:3000`/.
+______________________________________________________________________________________________________
